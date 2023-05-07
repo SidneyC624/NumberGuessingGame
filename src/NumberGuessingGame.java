@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -15,6 +16,7 @@ public class NumberGuessingGame {
 		
 		random = new Random();
 		scanner = new Scanner(System.in);
+		guessRange = 0;
 		tryCount = 0;
 		
 		askRange();
@@ -22,10 +24,22 @@ public class NumberGuessingGame {
 	}
 	
 	public void askRange() {
-		
-		System.out.println("Enter the range of random number (from 1 up to): ");
-		guessRange = scanner.nextInt();
-		randomNumber = (random.nextInt(guessRange)) + 1;
+		do {
+			try {
+				System.out.println("Enter an integer greater than or equal to 10: ");
+				guessRange = scanner.nextInt();
+				randomNumber = (random.nextInt(guessRange)) + 1;
+				
+				break;
+			}
+			catch(InputMismatchException e) {
+				System.out.println("Invalid input");
+			}
+			finally {
+				scanner.nextLine();
+			}
+		}
+		while(guessRange <= 1);
 		
 		getGuess();
 		
@@ -34,10 +48,24 @@ public class NumberGuessingGame {
 	public void getGuess() {
 		
 		while(tryCount < triesAllowed) {
+			guess = 0;
+			do {
+				try {
+					System.out.println("You have " + (triesAllowed-tryCount) + " tries left");
+					System.out.println("Enter an integer guess (1-" + guessRange + "): ");
+					guess = scanner.nextInt();
+					
+					break;
+				}
+				catch(InputMismatchException e) {
+					System.out.println("Invalid input");
+				}
+				finally {
+					scanner.nextLine();
+				}
+			}
+			while(!(guess >= 1 && guess <= guessRange));
 			
-			System.out.println("You have " + (triesAllowed-tryCount) + " tries left");
-			System.out.println("Enter an integer guess (1-" + guessRange + "): ");
-			guess = scanner.nextInt();
 		
 			if(guess == randomNumber) {
 				System.out.println("Correct! You won");
