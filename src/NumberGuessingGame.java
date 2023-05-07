@@ -7,14 +7,14 @@ public class NumberGuessingGame {
 	Scanner scanner;
 	int guessRange;
 	int randomNumber;
-	int triesAllowed;
+	int guess;
+	final int triesAllowed = 7;
 	int tryCount;
 	
 	NumberGuessingGame() {
 		
 		random = new Random();
 		scanner = new Scanner(System.in);
-		triesAllowed = 7;
 		tryCount = 0;
 		
 		askRange();
@@ -23,22 +23,41 @@ public class NumberGuessingGame {
 	
 	public void askRange() {
 		
-		do {
-			System.out.println("Enter the range of the random number (from 1 up to): ");
-		}
-		while(scanner.hasNextInt());
-		
+		System.out.println("Enter the range of random number (from 1 up to): ");
 		guessRange = scanner.nextInt();
+		randomNumber = (random.nextInt(guessRange)) + 1;
+		
 		getGuess();
 		
 	}
 	
 	public void getGuess() {
 		
-		do {
-			System.out.println("Enter a guess between 1 and " + guessRange + " : ");
+		while(tryCount < triesAllowed) {
+			
+			System.out.println("You have " + (triesAllowed-tryCount) + " tries left");
+			System.out.println("Enter an integer guess (1-" + guessRange + "): ");
+			guess = scanner.nextInt();
+		
+			if(guess == randomNumber) {
+				System.out.println("Correct! You won");
+				System.out.println("It took you " + tryCount + " tries");
+				break;
+			}
+			else if(guess > randomNumber) {
+				System.out.println("The number is less than " + guess);
+			}
+			else {
+				System.out.println("The number is greater than " + guess);
+			}
+			
+			tryCount++;
 		}
-		while(scanner.hasNextInt());
+		
+		if(tryCount == triesAllowed) {
+			System.out.println("Oops, You've used all your chances :(");
+		}
+		
 	}
 	
 }
